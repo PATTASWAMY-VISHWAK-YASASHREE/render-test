@@ -9,9 +9,6 @@ import joblib
 app = Flask(__name__)
 
 # Enable CORS for all routes
-from flask_cors import CORS
-CORS(app)
-
 # ----------------------------
 # Load the trained model
 # ----------------------------
