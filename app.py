@@ -7,7 +7,10 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 
 app = Flask(__name__)
+
 # Enable CORS for all routes
+from flask_cors import CORS
+CORS(app)
 
 # ----------------------------
 # Load the trained model
@@ -80,6 +83,12 @@ def predict():
 
     return jsonify({"recommendation": recommended_action})
 
+# ----------------------------
+# Root URL: Returns a basic response
+# ----------------------------
+@app.route('/')
+def index():
+    return "Welcome to the Diabetes Treatment Recommendation API!"
+
 if __name__ == '__main__':
-    app.run(debug=True)
     app.run(debug=True)
