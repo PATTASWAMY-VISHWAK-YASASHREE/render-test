@@ -4,10 +4,9 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from flask import Flask, request, jsonify
 from sklearn.preprocessing import StandardScaler
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+ # Enable CORS for all routes
 
 # ----------------------------
 # Load the trained model
@@ -84,4 +83,4 @@ def predict():
     return jsonify({"recommendation": recommended_action})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True)
