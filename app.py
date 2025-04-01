@@ -52,6 +52,11 @@ def predict():
         data_json.get("Exercise")
     ]
 
+    # Ensure the input data has the correct number of features
+    # Add placeholders for missing features if necessary
+    while len(patient_data) < 11:
+        patient_data.append(0)  # or use a more appropriate default value
+
     # Scale the features that were scaled during training:
     # We assume columns: Age, Glucose, HbA1c, Systolic_BP, Diastolic_BP, BMI, and Exercise need scaling,
     # while Medication remains raw.
@@ -79,7 +84,6 @@ def predict():
     recommended_action = actions.get(action_id, "No Recommendation Available")
 
     return jsonify({"recommendation": recommended_action})
-
 # ----------------------------
 # Root URL: Returns a basic response
 # ----------------------------
