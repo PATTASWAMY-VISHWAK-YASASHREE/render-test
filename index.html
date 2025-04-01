@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diabetes Treatment Recommendation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      background: #fff;
+      margin: auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 2px 2px 12px rgba(0,0,0,0.1);
+    }
+    .container h2 {
+      text-align: center;
+    }
+    .form-field {
+      margin-bottom: 15px;
+    }
+    .form-field label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-field input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background: #5c85d6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #466bb0;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Diabetes Treatment Recommendation</h2>
+    <div class="form-field">
+      <label for="age">Age:</label>
+      <input type="number" id="age" placeholder="Enter Age">
+    </div>
+    <div class="form-field">
+      <label for="glucose">Glucose Level:</label>
+      <input type="number" id="glucose" placeholder="Enter Glucose Level">
+    </div>
+    <div class="form-field">
+      <label for="hba1c">HbA1c:</label>
+      <input type="number" step="0.1" id="hba1c" placeholder="Enter HbA1c">
+    </div>
+    <div class="form-field">
+      <label for="systolic">Systolic Blood Pressure:</label>
+      <input type="number" id="systolic" placeholder="Enter Systolic BP">
+    </div>
+    <div class="form-field">
+      <label for="diastolic">Diastolic Blood Pressure:</label>
+      <input type="number" id="diastolic" placeholder="Enter Diastolic BP">
+    </div>
+    <div class="form-field">
+      <label for="bmi">BMI:</label>
+      <input type="number" step="0.1" id="bmi" placeholder="Enter BMI">
+    </div>
+    <div class="form-field">
+      <label for="medication">Medication (0 = No, 1 = Yes):</label>
+      <input type="number" id="medication" placeholder="Enter 0 or 1">
+    </div>
+    <div class="form-field">
+      <label for="exercise">Exercise Frequency (times per week):</label>
+      <input type="number" id="exercise" placeholder="Enter number of times">
+    </div>
+    <button onclick="predictTreatment()">Predict Treatment</button>
+    <div id="result"></div>
+  </div>
+  <script>
+    async function predictTreatment() {
+      // Gather input values from the form
+      const patientData = {
+        Age: parseFloat(document.getElementById('age').value),
+        Glucose: parseFloat(document.getElementById('glucose').value),
+        HbA1c: parseFloat(document.getElementById('hba1c').value),
+        Systolic_BP: parseFloat(document.getElementById('systolic').value),
+        Diastolic_BP: parseFloat(document.getElementById('diastolic').value),
+        BMI: parseFloat(document.getElementById('bmi').value),
+        Medication: parseFloat(document.getElementById('medication').value),
+        Exercise: parseFloat(document.getElementById('exercise').value)
+      };
+
+      // Send a POST request to the Flask backend
+      try {
+        const response = await fetch('https://project001-ro90.onrender.com/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(patientData)
+        });
+        const data = await response.json();
+        document.getElementById('result').innerText = "Recommended Treatment: " + data.recommendation;
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('result').innerText = "Error in prediction.";
+      }
+    }
+  </script>
+</body>
+</html>
