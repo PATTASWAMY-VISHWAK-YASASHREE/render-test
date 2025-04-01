@@ -4,9 +4,10 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from flask import Flask, request, jsonify
 from sklearn.preprocessing import StandardScaler
+import joblib
 
 app = Flask(__name__)
- # Enable CORS for all routes
+# Enable CORS for all routes
 
 # ----------------------------
 # Load the trained model
@@ -15,12 +16,9 @@ trained_model = load_model("dqn_diabetes_model.h5", compile=False)
 trained_model.compile(loss=tf.keras.losses.MeanSquaredError(), optimizer='adam')
 
 # ----------------------------
-# Load and fit the scaler on training data
+# Load the pre-fitted scaler
 # ----------------------------
-# In production, you should load a pre-fitted scaler, e.g., using joblib.load("scaler.save")
-data = pd.read_csv("synthetic_ehr_data.csv")
-scaler = StandardScaler()
-scaler.fit(data[['Age', 'Glucose', 'HbA1c', 'Systolic_BP', 'Diastolic_BP', 'BMI', 'Exercise']])
+scaler = joblib.load("scaler.joblib")
 
 # ----------------------------
 # Define the actions dictionary
@@ -83,4 +81,5 @@ def predict():
     return jsonify({"recommendation": recommended_action})
 
 if __name__ == '__main__':
+    app.run(debug=True)
     app.run(debug=True)
